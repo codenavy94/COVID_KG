@@ -132,7 +132,6 @@ model/
 
 preds/
 
-sample_pred_out.txt
 cached*
 
 model/
