@@ -5,6 +5,7 @@ import random
 import numpy as np
 import torch
 from transformers import BertTokenizer
+from tokenization_kobert import KoBertTokenizer
 
 from official_eval import official_f1
 
@@ -20,6 +21,10 @@ def load_tokenizer(args):
     tokenizer.add_special_tokens({"additional_special_tokens": ADDITIONAL_SPECIAL_TOKENS})
     return tokenizer
 
+# KobertTokenizer 사용
+# def load_tokenizer(args):
+#     tokenizer = KoBertTokenizer.from_pretrained(args.model_name_or_path)
+#     return tokenizer
 
 def write_prediction(args, output_file, preds):
     """
