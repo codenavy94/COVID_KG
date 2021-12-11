@@ -6,9 +6,9 @@ import numpy as np
 import torch
 from transformers import BertTokenizer
 from tokenization_kobert import KoBertTokenizer
+from sklearn.metrics import f1_score, classification_report
 tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
-
-from official_eval import official_f1
+#from official_eval import official_f1
 
 ADDITIONAL_SPECIAL_TOKENS = ["<e1>", "</e1>", "<e2>", "</e2>"]
 
@@ -67,10 +67,14 @@ def compute_metrics(preds, labels):
 def simple_accuracy(preds, labels):
     return (preds == labels).mean()
 
-
 def acc_and_f1(preds, labels, average="macro"):
     acc = simple_accuracy(preds, labels)
+    f1 = f1_score(labels, preds, average = 'weighted')
+    label_cat = [0,1,2,3,4,5]
+    names = ['Others','Triggers', 'IsTriggeredBy', 'Accompanies', 'IsAccompaniedBy']
+
+    print(classification_report(labels, preds, label_cat, names))
     return {
         "acc": acc,
-        "f1": official_f1(),
+        "f1": f1,
     }
