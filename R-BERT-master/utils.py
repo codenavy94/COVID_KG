@@ -6,8 +6,9 @@ import numpy as np
 import torch
 from transformers import BertTokenizer
 from tokenization_kobert import KoBertTokenizer
-from sklearn.metrics import f1_score, classification_report
-# from official_eval import official_f1
+tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
+
+from official_eval import official_f1
 
 ADDITIONAL_SPECIAL_TOKENS = ["<e1>", "</e1>", "<e2>", "</e2>"]
 
@@ -22,8 +23,12 @@ def get_label(args):
 #     return tokenizer
 
 # KobertTokenizer 사용
+# def load_tokenizer(args):
+#     tokenizer = KoBertTokenizer.from_pretrained(args.model_name_or_path)
+#     return tokenizer
+
 def load_tokenizer(args):
-    tokenizer = KoBertTokenizer.from_pretrained(args.model_name_or_path)
+    tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
     return tokenizer
 
 def write_prediction(args, output_file, preds):
@@ -63,21 +68,9 @@ def simple_accuracy(preds, labels):
     return (preds == labels).mean()
 
 
-# def acc_and_f1(preds, labels, average="macro"):
-#     acc = simple_accuracy(preds, labels)
-#     return {
-#         "acc": acc,
-#         "f1": official_f1(),
-#     }
-
 def acc_and_f1(preds, labels, average="macro"):
     acc = simple_accuracy(preds, labels)
-    f1 = f1_score(labels, preds, average = 'weighted')
-    label_cat = [0,1,2,3,4,5,6,7,8,9]
-    names = ['Others','Cause-Effect', 'Effect-Cause', 'Instrument-Agency', 'Agency-Instrument', 'Product-Producer', 'Producer-Product', 'Entity-Origin', 'Origin-Entity']
-
-    print(classification_report(labels, preds, label_cat, names))
     return {
         "acc": acc,
-        "f1": f1,
+        "f1": official_f1(),
     }
