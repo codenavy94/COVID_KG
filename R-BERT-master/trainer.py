@@ -5,13 +5,14 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from tqdm import tqdm, trange
-from transformers import AdamW, BertConfig, get_linear_schedule_with_warmup
+#from transformers import AdamW, BertConfig, get_linear_schedule_with_warmup
+from transformers import AdamW, BertConfig
+from transformers import WarmupLinearSchedule as get_linear_schedule_with_warmup
 
 from model import RBERT
 from utils import compute_metrics, get_label, write_prediction
 
 logger = logging.getLogger(__name__)
-
 
 class Trainer(object):
     def __init__(self, args, train_dataset=None, dev_dataset=None, test_dataset=None):
@@ -71,8 +72,8 @@ class Trainer(object):
         )
         scheduler = get_linear_schedule_with_warmup(
             optimizer,
-            num_warmup_steps=self.args.warmup_steps,
-            num_training_steps=t_total,
+            warmup_steps=self.args.warmup_steps,
+            t_total=t_total,
         )
 
         # Train!
