@@ -29,6 +29,7 @@ def get_label(args):
 
 def load_tokenizer(args):
     tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
+    tokenizer.add_special_tokens({"additional_special_tokens": ADDITIONAL_SPECIAL_TOKENS})
     return tokenizer
 
 def write_prediction(args, output_file, preds):
