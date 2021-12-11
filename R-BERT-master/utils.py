@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from transformers import BertTokenizer
 from tokenization_kobert import KoBertTokenizer
+tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
 
 from official_eval import official_f1
 
@@ -16,15 +17,19 @@ def get_label(args):
     return [label.strip() for label in open(os.path.join(args.data_dir, args.label_file), "r", encoding="utf-8")]
 
 
-def load_tokenizer(args):
-    tokenizer = BertTokenizer.from_pretrained(args.model_name_or_path)
-    tokenizer.add_special_tokens({"additional_special_tokens": ADDITIONAL_SPECIAL_TOKENS})
-    return tokenizer
+# def load_tokenizer(args):
+#     tokenizer = BertTokenizer.from_pretrained(args.model_name_or_path)
+#     tokenizer.add_special_tokens({"additional_special_tokens": ADDITIONAL_SPECIAL_TOKENS})
+#     return tokenizer
 
 # KobertTokenizer 사용
 # def load_tokenizer(args):
 #     tokenizer = KoBertTokenizer.from_pretrained(args.model_name_or_path)
 #     return tokenizer
+
+def load_tokenizer(args):
+    tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
+    return tokenizer
 
 def write_prediction(args, output_file, preds):
     """
